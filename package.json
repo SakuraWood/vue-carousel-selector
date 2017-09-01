@@ -1,0 +1,29 @@
+{
+  "name": "vue-carousel-selector",
+  "version": "1.0.0",
+  "description": "a carousel selector for vuejs",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SakuraWood/vue-carousel-selector.git"
+  },
+  "keywords": [
+    "carousel",
+    "selector",
+    "vuejs"
+  ],
+  "author": "SakuraWood (Lee Sure)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SakuraWood/vue-carousel-selector/issues"
+  },
+  "homepage": "https://github.com/SakuraWood/vue-carousel-selector#readme"
+}

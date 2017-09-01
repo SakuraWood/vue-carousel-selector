@@ -1,2 +1,2 @@
-# vue-carousel-list
-a carousel for your list
+# vue-carousel-selector
+a carousel selector for vuejs
