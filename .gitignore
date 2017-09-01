@@ -3,6 +3,7 @@
 .idea/
 .deploy_git/
 node_modules/
+config/
 .DS_Store
 npm-debug.log
 
