@@ -10,25 +10,27 @@
 <script>
 import Slide from './slide'
 export default {
-    name: 'carouselist',
+    name: 'carousel-selector',
     props: ['options'],
     mounted() {
-        this.$nextTick(function() {
-            this.containerWidth = this.$refs.cs.offsetWidth
-            this.containerHeight = this.$refs.cs.offsetHeight
-        })
+
     },
     components: {
         Slide
+    },
+    watch: {
+        containerWidth: function(newValue) {
+            console.log(newValue)
+        }
     },
     data: function() {
         return {
             offset: 0, //the offset of the carousel
             oldoffset: 0,
             movedirection: 0,//0 means direction is left or up,1 means direction is right or down
-            slideNum: this.options.num,//calculate the slide num of this carousel
-            containerWidth: 100,//calculate the width of the slide container
-            containerHeight: 100,//calculate the height of the slide container
+            // slideNum: this.options.num,//calculate the slide num of this carousel
+            containerWidth: this.options.initTZ.width,//calculate the width of the slide container
+            containerHeight: this.options.initTZ.height,//calculate the height of the slide container
             starttime: 0,//start to calculate the speed of carousel scrolling
             endtime: 0,//finish to calculate the speed of carousel scrolling
             v: 0,//the speed of carousel scrolling
@@ -40,18 +42,29 @@ export default {
             moveY: 0,
             rtl: this.options.rtl === undefined ? false : this.options.rtl,
             dtu: this.options.dtu === undefined ? false : this.options.dtu,
-            theta: Number(360 / this.options.num).toFixed(2) //θ值
+            istouching: false,
         }
     },
     watch: {
-        slideNum: function() {
-            this.$nextTick(function() {
-                this.containerWidth = this.$refs.cs.offsetWidth
-                this.containerHeight = this.$refs.cs.offsetHeight
-            })
-        }
+        // slideNum: function() {
+
+        // }
     },
     computed: {
+        theta: function() {
+            return Number(Number(360 / this.options.num).toFixed(2)) //θ值
+        },
+        slideNum: function() {
+            this.$nextTick(function() {
+
+                // this.containerWidth = this.$refs.cs.offsetWidth
+                // this.containerHeight = this.$refs.cs.offsetHeight
+
+                // console.log(this.containerWidth + '    ' + this.containerHeight)
+                // this.tz = this.isVertical ? Math.round((this.containerHeight / 2) / Math.tan(Math.PI / this.slideNum)) : Math.round((this.containerWidth / 2) / Math.tan(Math.PI / this.slideNum))
+            })
+            return this.options.num
+        },
         currentSlide: function() {
             return Math.round((this.offset / this.theta) % this.slideNum < 0 ? this.slideNum + (this.offset / this.theta) % this.slideNum : (this.offset / this.theta) % this.slideNum)
         },
@@ -64,8 +77,15 @@ export default {
         /** 
          * @description the translatez value of 3d object
          */
-        tz: function() {
-            return this.isVertical ? Math.round((this.containerHeight / 2) / Math.tan(Math.PI / this.slideNum)) : Math.round((this.containerWidth / 2) / Math.tan(Math.PI / this.slideNum))
+        tz: {
+            get: function() {
+                console.log(this.containerHeight + '  ' + this.slideNum)
+                return this.isVertical ? Math.round((this.containerHeight / 2) / Math.tan(Math.PI / this.slideNum)) : Math.round((this.containerWidth / 2) / Math.tan(Math.PI / this.slideNum))
+            },
+            set: function(newValue) {
+
+            }
+
         },
 
         tmstyle: function() {
@@ -77,11 +97,12 @@ export default {
                     'transform': 'translateZ(' + (-this.tz) + 'px)' + ' ' + 'rotateY(' + this.offset + 'deg)',
                     'transition': 'transform ' + this.vt + 'ms'
                 }
-        }
+        },
     },
     methods: {
         touchstart: function(event) {
             if (this.touchable) {
+                this.istouching = true
                 this.vt = 0
                 let touch = event.targetTouches[0]
                 this.moveX = touch.pageX
@@ -125,17 +146,19 @@ export default {
         },
         adjustAngle: function() {
             console.log(this.offset)
+            this.offset === NaN ? this.offset = this.currentSlide * this.theta : void 0
             let ceil = Math.ceil(this.offset / this.theta)
             let bl = Math.abs(this.theta * ceil - this.offset) < this.theta / 2
             let s = this.movedirection === 1 ? Math.round(this.v * this.v) : -Math.round(this.v * this.v)
             console.log(s)
             if (bl) {
+                this.vt = Math.abs(this.v) * 1000
                 this.offset = (Math.ceil(this.offset / this.theta) + s) * this.theta
-                this.vt = Math.abs(this.v) * 1000
             } else {
-                this.offset = (Math.floor(this.offset / this.theta) + s) * this.theta
                 this.vt = Math.abs(this.v) * 1000
+                this.offset = (Math.floor(this.offset / this.theta) + s) * this.theta
             }
+            this.istouching = false
         },
         moveRight: function(step) {
             step === undefined ? step = 0 : void 0
@@ -152,6 +175,18 @@ export default {
         moveDown: function(step) {
             step === undefined ? step = 0 : void 0
             this.offset -= this.theta * step
+        },
+        goToIndex: function(index, theta) {
+            theta === undefined ? theta = this.theta : void 0
+            this.vt = 0
+            this.offset = (index - 2) * theta
+            this.vt = 80
+            this.offset = index * theta
+        },
+        goToIndexNoWait: function(index, theta) {
+            theta === undefined ? theta = this.theta : void 0
+            this.vt = 0
+            this.offset = index * theta
         }
     }
 }

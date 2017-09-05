@@ -19,15 +19,16 @@ export default {
     computed: {
         isCurrent: function() {
             return {
-                'current': this.parent.currentSlide === this.index
+                'current': this.parent.currentSlide === this.index,
+                'touching': this.parent.istouching
             }
         },
         rstyle: function() {
             return this.isVertical ?
                 {
-                    transform: 'rotateX(' + (this.rtl ? -this.index : this.index) * this.deg + 'deg)' + ' ' + 'translateZ(' + this.parent.tz + 'px)'
+                    transform: 'rotateX(' + (this.rtl ? -this.index : this.index) * this.deg + 'deg)' + ' ' + 'translateZ(' + this.parent.tz + 'px)',
                 } : {
-                    transform: 'rotateY(' + (this.dtu ? this.index : -this.index) * this.deg + 'deg)' + ' ' + 'translateZ(' + this.parent.tz + 'px)'
+                    transform: 'rotateY(' + (this.dtu ? this.index : -this.index) * this.deg + 'deg)' + ' ' + 'translateZ(' + this.parent.tz + 'px)',
                 }
         }
 
@@ -37,8 +38,44 @@ export default {
 </script>
 <style>
 .carousel-slide {
-    display: block;
     position: absolute;
+    opacity: 0
+}
+
+.carousel-slide.current {
+    display: block;
     opacity: 1;
+}
+
+.carousel-slide.touching:not(.current) {
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+.carousel-slide:not(.current) {
+    -webkit-animation: fadeOut 1.5s;
+    animation: fadeOut 1.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        display: block;
+    }
+    100% {
+        opacity: 1;
+        display: block;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        display: block;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
 }
 </style>
