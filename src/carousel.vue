@@ -10,7 +10,7 @@
 <script>
 import Slide from './slide'
 export default {
-    name: 'carousel-selector',
+    name: 'carousel',
     props: ['options'],
     mounted() {
 

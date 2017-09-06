@@ -10,23 +10,22 @@ npm install --save-dev vue-carousel-selector
 ## Usage
 * in your template:
 ```html
-<carouselselector class="temp-selector-container" :options="carouseloptions" ref="carouselselector" :show="show">
+<carousel class="temp-selector-container" :options="carouseloptions" ref="carouselselector" :show="show">
     <slide v-for="(slide,i) in temperatures" :key="slide" class="temp-item" :index="i">
         {{slide}}
     </slide>
-</carouselselector>
+</carousel>
 ```
 
 * in your script:
 
 ```javascript
-import carouselselector from './carousel'
-import slide from './slide'
+import { carousel, slide } from 'vue-carousel-selector'
 
 ...
 
 components: {
-    carouselselector,
+    carousel,
     slide
 },
 
