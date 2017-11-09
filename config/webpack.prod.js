@@ -24,6 +24,16 @@ module.exports = {
                 /* 排除模块安装目录的文件 */
                 include: projectRoot,
                 exclude: /node_modules/
+            },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // creates style nodes from JS strings
+                }, {
+                    loader: "css-loader" // translates CSS into CommonJS
+                }, {
+                    loader: "sass-loader" // compiles Sass to CSS
+                }]
             }
         ]
     },

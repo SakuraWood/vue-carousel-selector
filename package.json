@@ -1,6 +1,6 @@
 {
   "name": "vue-carousel-selector",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "description": "a carousel selector for vuejs",
   "main": "dist/vue-carousel-selector.js",
   "directories": {
@@ -37,6 +37,8 @@
     "clean-webpack-plugin": "^0.1.16",
     "css-loader": "^0.28.7",
     "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "vue": "^2.4.2",
