@@ -67,9 +67,19 @@ export default {
               );
         });
       }
+    },
+    offset: function (newv, oldv) {
+      if (!newv){
+        this.offset = oldv;
+      }
     }
   },
   computed: {
+    touchable: function () {
+      return this.options.touchable === undefined
+        ? true
+        : this.options.touchable
+    },
     containerHeight: {
       get: function() {
         return this.options.initTZ.height;
@@ -107,19 +117,21 @@ export default {
       return this.options.num;
     },
     currentSlide: function() {
+      let slideTemp;
       if (this.isVertical) {
-        return Math.round(
+        slideTemp = Math.round(
           (this.offset / this.theta) % this.slideNum < 0
             ? this.slideNum + (this.offset / this.theta) % this.slideNum
             : (this.offset / this.theta) % this.slideNum
         );
       } else {
-        return (this.offset / this.theta) % this.slideNum <= 0
+        slideTemp = (this.offset / this.theta) % this.slideNum <= 0
           ? Math.round(Math.abs(this.offset / this.theta)) % this.slideNum
           : Math.round(
               this.slideNum - (this.offset / this.theta) % this.slideNum
             ) % this.slideNum;
       }
+      return (slideTemp !== this.slideNum) ? slideTemp : 0;
     },
     /**
      * @description the carousel direction , default is horizontal
@@ -221,9 +233,14 @@ export default {
     },
     adjustAngle: function() {
       console.log(this.offset);
-      this.offset === NaN
-        ? (this.offset = this.currentSlide * this.theta)
-        : void 0;
+      // 此判断条件写法不正确
+//      this.offset === NaN
+//        ? (this.offset = this.currentSlide * this.theta)
+//        : void 0;
+      // 正确的写法
+      if (!this.offset){
+        this.offset = this.currentSlide * this.theta;
+      };
       let ceil = Math.ceil(this.offset / this.theta);
       let bl = Math.abs(this.theta * ceil - this.offset) < this.theta / 2;
       let s =
@@ -241,6 +258,8 @@ export default {
       this.istouching = false;
       this.options.istouching = false;
       this.methods === undefined ? void 0 : this.methods();
+      // offset=0 时没有动画效果，是个奇怪的问题，故等于0时给个1
+      (!this.offset) ? this.offset=1 : void 0;
     },
     moveRight: function(step) {
       step === undefined ? (step = 0) : void 0;

@@ -1,0 +1,6 @@
+2018.3.16 修复了几个使用中发现的的bug
+1. Line71  watch里添加对offset的监听，因其在使用时有时会取到undefined，导致currentSlide计算不出来
+2. Line78  computed里添加对touchable的判断，因其在使用时有时会取到undefined
+3. Line120  在currentSlide里添加判断，当其被四舍五入后等于slideNum时（最大值应是slideNum-1），置为0，因（slideNum-0.5,slideNum）与取（0，0.5）合并为上下滑动不超过一半距离的情况
+4. Line240  判断条件不正确，NaN与自身并不相等
+5. Line261  offset=0 时没有动画效果，是个奇怪的问题，故等于0时给个1（与目标位置偏离了一点点）
